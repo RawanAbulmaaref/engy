@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>كل سنة وانتي طيبة يا انجي</title>
+<link href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@700&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --plum:#2a1240; --plum2:#3d1b5c; --rose:#ff7aa8; --sun:#ffd166; --mint:#7be0c3; --lav:#d4c4ff; --paper:#fff8fb;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;min-height:100vh;background:var(--plum);color:var(--paper);font-family:'Tajawal',system-ui,sans-serif;overflow-x:hidden}
+canvas{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:50}
+section{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 22px;text-align:center}
+
+/* cover */
+#cover{position:relative;background:radial-gradient(circle at 50% 30%,var(--plum2),var(--plum) 70%);transition:opacity .8s,transform .8s}
+#cover.gone{opacity:0;transform:scale(.96);pointer-events:none;position:absolute;inset:0}
+.sub{font-size:1.15rem;color:var(--lav);margin:0 0 6px}
+h1{font-family:'Aref Ruqaa',serif;font-size:clamp(5rem,26vw,11rem);line-height:1.05;margin:0;color:var(--sun);text-shadow:0 6px 0 rgba(255,122,168,.45)}
+.wish{font-size:1.4rem;font-weight:700;margin:6px 0 34px}
+button{font:inherit;font-weight:700;font-size:1.1rem;border:0;border-radius:999px;padding:15px 34px;background:var(--rose);color:var(--plum);cursor:pointer;box-shadow:0 6px 0 #c4507d;transition:transform .15s,box-shadow .15s}
+button:active{transform:translateY(4px);box-shadow:0 2px 0 #c4507d}
+button:focus-visible{outline:3px solid var(--sun);outline-offset:4px}
+.balloons{position:absolute;top:0;inset-inline:0;height:100%;pointer-events:none;overflow:hidden}
+.b{position:absolute;bottom:-90px;width:44px;height:56px;border-radius:50% 50% 48% 48%;opacity:.85;animation:rise linear infinite}
+.b::after{content:"";position:absolute;top:100%;left:50%;width:1.5px;height:40px;background:rgba(255,255,255,.35)}
+@keyframes rise{to{transform:translateY(-115vh) rotate(8deg)}}
+
+/* letter */
+#letter{display:none;background:linear-gradient(180deg,var(--plum),var(--plum2))}
+#letter.on{display:flex}
+.paper{background:var(--paper);color:#3a2150;max-width:560px;width:100%;border-radius:18px;padding:34px 26px;text-align:right;box-shadow:0 20px 50px rgba(0,0,0,.35);border-top:8px solid var(--rose)}
+.paper h2{font-family:'Aref Ruqaa',serif;font-size:2.3rem;margin:0 0 16px;color:var(--plum2)}
+.paper p{font-size:1.15rem;line-height:2;margin:0 0 14px;opacity:0;transform:translateY(10px);transition:opacity .9s,transform .9s}
+.paper p.show{opacity:1;transform:none}
+.sign{font-family:'Aref Ruqaa',serif;font-size:1.7rem;color:#c4507d;margin-top:8px}
+
+/* cake */
+#cake{display:none;background:var(--plum)}
+#cake.on{display:flex}
+.cake{position:relative;width:200px;margin:36px auto 30px}
+.layer{height:62px;border-radius:14px}
+.l1{background:var(--rose);width:200px}
+.l2{background:var(--lav);width:150px;margin:-6px auto 0}
+.l2,.l1{box-shadow:inset 0 14px 0 rgba(255,255,255,.4)}
+.candle{position:absolute;top:-44px;left:50%;transform:translateX(-50%);width:12px;height:44px;background:var(--sun);border-radius:4px}
+.flame{position:absolute;top:-26px;left:50%;transform:translateX(-50%);width:16px;height:26px;background:radial-gradient(circle at 50% 70%,#fff3c4,#ffb347 60%,#ff7a45);border-radius:50% 50% 50% 50%/65% 65% 35% 35%;animation:flick .25s infinite alternate;transition:opacity .4s}
+.out .flame{opacity:0;animation:none}
+@keyframes flick{to{transform:translateX(-50%) scale(1.1,.92) rotate(3deg)}}
+.cake-t{font-size:1.5rem;font-weight:700;margin:0 0 6px}
+.cake-s{color:var(--lav);margin:0 0 24px;min-height:1.6em}
+@media (prefers-reduced-motion:reduce){.b,.flame{animation:none}.paper p{transition:none}}
+</style>
+</head>
+<body>
+<canvas id="fx" aria-hidden="true"></canvas>
+
+<section id="cover">
+  <div class="balloons" id="balloons" aria-hidden="true"></div>
+  <p class="sub">النهاردة يومك يا</p>
+  <h1>انجي</h1>
+  <p class="wish">كل سنة وانتي طيبة 🎂</p>
+  <button id="open">افتحي الهدية</button>
+</section>
+
+<section id="letter">
+  <article class="paper">
+    <h2>إلى انجي حبيبتي</h2>
+    <p>كل سنة وانتي طيبة يا أحلى انجي في الدنيا 🤍</p>
+    <p>النهاردة مش يوم عادي، النهاردة اليوم اللي ربنا بعت فيه واحدة من أحلى الناس اللي في حياتي.</p>
+    <p>انتي من الناس اللي وجودها لوحده بيفرق. بتدخلي أي مكان فيبقى أخف وأحلى، وبتضحكي فالدنيا كلها تهون.</p>
+    <p>مش عارفة أشكرك ازاي على كل مرة سمعتيني فيها، وكل مرة قلتيلي «هتعدي»، وكل مرة وقفتي جنبي من غير ما أطلب.</p>
+    <p>نفسي السنة دي تحققي فيها كل حاجة بتحلمي بيها، وقلبك يفضل مطمن وفرحان، والخير كله يجيلك لحد عندك.</p>
+    <p>ربنا يخليكي ليا، وميحرمنيش منك أبدا. بحبك أوي أوي يا انجي.</p>
+    <div class="sign p show" style="opacity:0">صحبتك، روان 💗</div>
+  </article>
+</section>
+
+<section id="cake">
+  <p class="cake-t">آخر حاجة…</p>
+  <p class="cake-s" id="cs">اتمني أمنية وبعدين اطفي الشمعة</p>
+  <div class="cake" id="ck"><div class="candle"></div><div class="flame"></div><div class="layer l2"></div><div class="layer l1"></div></div>
+  <button id="blow">اطفي الشمعة</button>
+</section>
+
+<script>
+const $=s=>document.querySelector(s);
+const cv=$('#fx'),cx=cv.getContext('2d');let parts=[],run=false;
+function size(){cv.width=innerWidth;cv.height=innerHeight}size();addEventListener('resize',size);
+function burst(n){
+  const cols=['#ff7aa8','#ffd166','#7be0c3','#d4c4ff','#fff8fb'];
+  for(let i=0;i<n;i++)parts.push({x:innerWidth/2,y:innerHeight*.6,vx:(Math.random()-.5)*14,vy:-Math.random()*15-4,s:Math.random()*7+4,c:cols[i%5],r:Math.random()*6,a:1});
+  if(!run){run=true;requestAnimationFrame(tick)}
+}
+function tick(){
+  cx.clearRect(0,0,cv.width,cv.height);
+  parts=parts.filter(p=>p.a>0.02);
+  parts.forEach(p=>{p.vy+=.35;p.x+=p.vx;p.y+=p.vy;p.r+=.2;p.a-=.006;cx.globalAlpha=p.a;cx.fillStyle=p.c;cx.save();cx.translate(p.x,p.y);cx.rotate(p.r);cx.fillRect(-p.s/2,-p.s/4,p.s,p.s/2);cx.restore()});
+  if(parts.length)requestAnimationFrame(tick);else{run=false;cx.clearRect(0,0,cv.width,cv.height)}
+}
+const bl=$('#balloons'),bc=['#ff7aa8','#ffd166','#7be0c3','#d4c4ff'];
+for(let i=0;i<9;i++){const b=document.createElement('i');b.className='b';b.style.cssText=`left:${5+i*11}%;background:${bc[i%4]};animation-duration:${9+i%4*3}s;animation-delay:${-i*2}s`;bl.appendChild(b)}
+
+$('#open').onclick=()=>{
+  burst(160);
+  $('#cover').classList.add('gone');
+  const L=$('#letter');L.classList.add('on');scrollTo(0,0);
+  const ps=[...L.querySelectorAll('p,.sign')];
+  ps.forEach((p,i)=>setTimeout(()=>{p.classList.add('show');p.style.opacity=1;p.style.transform='none'},700+i*1500));
+  setTimeout(()=>{$('#cake').classList.add('on')},700+ps.length*1500);
+};
+$('#blow').onclick=()=>{
+  $('#ck').classList.add('out');
+  $('#cs').textContent='يا رب أمنيتك تتحقق، وكل سنة وانتي أحلى 🎉';
+  $('#blow').textContent='كل سنة وانتي طيبة!';
+  burst(220);
+};
+</script>
+</body>
+</html>
